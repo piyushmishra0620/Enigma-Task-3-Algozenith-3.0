@@ -237,7 +237,7 @@
     let ts = '';
     let hash = '';
     window.addEventListener('DOMContentLoaded', function () {
-      fetch('http://localhost:3000/api_keys')
+      fetch('https://algozenith-server.onrender.com/api_keys')
         .then(res => res.json())
         .then((data) => {
           ts = data.ts2;
@@ -312,7 +312,7 @@
       document.getElementById('background').style.opacity = '0.5';
       const query = document.getElementById("comicInput").value.trim();
       if (!query) return alert("Please enter a comic title.");
-      fetch('http://localhost:3000/api_keys')
+      fetch('https://algozenith-server.onrender.com/api_keys')
         .then(res => res.json())
         .then((data) => {
           ts = data.ts2;
