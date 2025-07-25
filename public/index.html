@@ -377,16 +377,16 @@
 
     <script>
         document.getElementById('fanzone').addEventListener('click',function(){
-            window.location.href='./fanpage.html';
+            window.location.href='/fan-zone';
         });
         document.getElementById('fanzoneDM').addEventListener('click',function(){
-            window.location.href='./fanpage.html';
+            window.location.href='/fan-zone';
         });
         document.getElementById('about').addEventListener('click',function(){
-            window.location.href='./about.html';
+            window.location.href='/about-us';
         });     
         document.getElementById('aboutDM').addEventListener('click',function(){
-            window.location.href='./about.html';
+            window.location.href='/about-us';
         });            
         const toggleBtn = document.querySelector('.toggle_btn');
         const menuIcon = document.querySelector('#menu-icon');
@@ -426,16 +426,16 @@
             }, 700);
         }
         document.getElementById('events').addEventListener('click',function(e){
-            showLoader(e);window.location.href='./events.html';
+            showLoader(e);window.location.href='/events';
         });
         document.getElementById('characters').addEventListener('click',function(e){
-            showLoader(e);window.location.href='./characters.html';
+            showLoader(e);window.location.href='/characters';
         });
         document.getElementById('comics').addEventListener('click',function(e){
-            showLoader(e);window.location.href='./comics.html';
+            showLoader(e);window.location.href='/comics';
         });
         document.getElementById('fanZone').addEventListener('click',function(e){
-            showLoader(e);window.location.href='./fanpage.html';
+            showLoader(e);window.location.href='/fan-zone';
         });
 
         clickableElements.forEach(element => {
