@@ -18,7 +18,7 @@ A Marvel-Comics website featuring all characters, comics, stories, series and al
 
 ## 📁 Project Structure
 
-bash
+```bash
 📁marvel/
 ├── 📄 server.js
 ├── 📄 package.json
@@ -30,7 +30,7 @@ bash
     ├── 📄 comics.html
     ├── 📄 events.html
     ├── 📄 fanpage.html
-
+```
 
 ---
 
@@ -45,7 +45,7 @@ bash
 
 ## 🛠 Setup Guide
 
-bash
+```bash
 #1) Create a folder named marvel and make it a git repository.
 `git init`.
 #2) Fork the github repository and clone it into your folder.
@@ -57,3 +57,4 @@ bash
 #PRIVATE_API= your private api key .
 #5) Start your server locally .
 `nodemon` server.js
+```
