@@ -30,6 +30,7 @@ A Marvel-Comics website featuring all characters, comics, stories, series and al
     ├── 📄 comics.html
     ├── 📄 events.html
     ├── 📄 fanzone.html
+    ├── 📄 about.html
 ```
 
 ---
