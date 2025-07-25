@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <title>MarvelPedia</title>
+    <meta charset="utf-8">
+    <meta name="viewport"
+        content="height=device-height, width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=0.25, user-scalable=yes">
+    <link rel="icon" href="./captain_america_shield.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            background-color: rgba(0, 0, 0, 0.815);
+            scroll-behavior: smooth;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+            min-height: 100vh;
+            overflow-y: scroll;
+            overflow-x: hidden;
+        }
+
+        #main {
+            display: none;
+        }
+
+        #main_nav_bar {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 8.5vh;
+            z-index: 10;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            border-bottom: 1px solid red;
+
+        }
+
+        #main_nav_bar img{
+            justify-self: left;
+            cursor: pointer;
+            margin-top: 6px;
+            margin-left: 6px;
+        }
+
+        #anchors {
+            justify-self: right;
+            display: flex;
+            align-items: center;
+            margin-right: 15px;
+        }
+
+        #anchors a[id="aboutnav"] {
+            margin-right: 6px;
+            margin-left: 4px;
+        }
+
+        #anchors a {
+            cursor: pointer;
+            padding-top: 12px;
+            padding-bottom: 20px;
+            padding-left: 30px;
+            padding-right: 30px;
+            border-radius: 12px;
+            color: white;
+            text-decoration: none;
+            font-size: 19px;
+        }
+
+        #search_icon {
+            font-size: 25px;
+            padding: 10px;
+            border-radius: 50%;
+            color: red;
+            border: 2px solid red;
+            margin-right: 10px;
+            background: transparent;
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+        }
+
+        #search_icon.active {
+            display: none;
+        }
+
+        #search_box {
+            display: none;
+        }
+
+        #search_box input {
+            padding: 15px;
+            border-radius: 40px;
+            border: 2px solid red;
+            background: transparent;
+            backdrop-filter: blur(12px);
+            color: white;
+            outline: none;
+            width: 48.2px;
+            transition: width 5s ease-in-out 1;
+        }
+
+        #search_box input:focus {
+            border-color: red;
+        }
+
+        #search_box.active {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        #search_box input.active {
+            width: 195.6px;
+        }
+
+        #anchors a:hover {
+            background-color: #f6551f43;
+            color: white;
+            border: 2px solid red;
+            box-shadow: -3px 3px 2px #f6551f43;
+        }
+
+        #search_icon:hover .magnifyingGlass {
+            animation: bounce 0.4s linear 1;
+        }
+
+        #hamburger_menu {
+            display: none;
+        }
+
+
+
+        #background {
+            display: none;
+        }
+
+        #cover {
+            position: relative;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            background: transparent;
+            z-index: 2;
+        }
+
+        #events_container #thumbnail {
+            width: 100%;
+            height: fit-content;
+            text-align: center;
+            margin: 0px;
+        }
+
+        #events_container #description {
+            max-width: 620px;
+            padding-left: 40px;
+            padding-right: 40px;
+            padding-top: 25px;
+            padding-bottom: 25px;
+            border-radius: 18px;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            color: white;
+            opacity: 1;
+        }
+
+        #end_para {
+            font-size: large;
+        }
+
+        @media(max-width:692px) {
+            #end_para {
+                font-size: 14px;
+            }
+        }
+
+        @media(max-width:605px) {
+            #end_para {
+                font-size: 10px;
+            }
+        }
+
+        @media(max-width:516px) {
+            #end_para {
+                font-size: 6px;
+            }
+        }
+
+        #navigation_menu {
+            position: fixed;
+            top: 8.5vh;
+            left: 0;
+            width: 100vw;
+            height: 0;
+            overflow: hidden;
+            background-color: rgba(0, 0, 0, 0.5);
+            transition: height 0.3s ease;
+            z-index: 10;
+            backdrop-filter: blur(5px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            border-bottom: 1px solid red;
+        }
+
+        #navigation_menu.active {
+            height: 180px;
+        }
+
+        #navigation_menu a {
+            color: white;
+            text-decoration: none;
+            font-size: 20px;
+        }
+
+        #navigation_menu a:focus,
+        #navigation_menu a:active {
+            color: red;
+        }
+
+        #navigation_menu ul {
+            list-style-type: none;
+        }
+
+
+        #main_nav_bar.active {
+            border-bottom: transparent;
+        }
+
+        #loader-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: transparent;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 55;
+            display: flex;
+            pointer-events: none;
+            background: radial-gradient(circle, #4c0000, #000000);
+        }
+
+        #loader-overlay img {
+            border: red solid;
+            border-radius: 500px;
+            background-size: cover;
+        }
+
+        #loader-shield {
+            width: 150px;
+            height: 150px;
+            pointer-events: auto;
+            animation: spin 1s linear infinite;
+            border-radius: 50%;
+            box-shadow: 0 0 15px 5px rgba(255, 0, 0, 0.7);
+        }
+
+        #loader2 {
+            display: none;
+        }
+
+
+        .dots {
+            display: block;
+            animation: symphonical_bounce 1s infinite;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            margin: 4px;
+        }
+
+        .dots:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .dots:nth-child(2) {
+            animation-delay: 0.25s;
+        }
+
+        .dots:nth-child(3) {
+            animation-delay: 0.5s;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+
+        }
+
+        @keyframes symphonical_bounce {
+            0% {
+                transform: translateY(-15px);
+            }
+
+            50% {
+                transform: translateY(-7.5px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        @keyframes bounce {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-4px);
+            }
+
+            75% {
+                transform: translateY(4px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        @media(max-width:650px) {
+            #eventsnav {
+                display: none;
+            }
+
+            #aboutnav {
+                display: none;
+            }
+
+            #hamburger_menu {
+                color: red;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 40px;
+                cursor: pointer;
+                outline: none;
+                border: 2px solid red;
+                padding: 2px;
+                height: 40px;
+                margin-right: 20px;
+                border-radius: 12px;
+                margin-left: auto;
+            }
+
+            .bars {
+                background-color: red;
+                width: 30px;
+                height: 6px;
+                border-radius: 12px;
+                margin: 2px;
+            }
+
+            #hamburger_menu.active .bars:nth-child(2) {
+                opacity: 0%;
+            }
+
+            #hamburger_menu.active .bars:nth-child(1) {
+                transform: rotate(45deg) translateY(6.9px) translateX(5.8px);
+            }
+
+            #hamburger_menu.active .bars:nth-child(3) {
+                transform: rotate(-45deg) translateY(-7.3px) translateX(6.3px);
+            }
+        }
+
+
+        @media(max-height:639px) {
+            #anchors a {
+                padding-top: 8px;
+                padding-bottom: 16px;
+                padding-left: 26px;
+                padding-right: 26px;
+                font-size: 15px;
+            }
+
+            #search_icon {
+                font-size: 21px;
+                padding: 6px;
+            }
+
+            #search_box input {
+                padding: 11px;
+            }
+
+            .bars {
+                width: 24px;
+                height: 3px;
+                margin: 1px;
+            }
+
+            #hamburger_menu {
+                height: 36px;
+                width: 36px;
+            }
+
+            #hamburger_menu.active .bars:nth-child(1) {
+                transform: rotate(45deg) translateY(2px) translateX(3px);
+            }
+
+            #hamburger_menu.active .bars:nth-child(3) {
+                transform: rotate(-45deg) translateY(-4px) translateX(4.8px);
+            }
+        }
+
+        @media(max-height:500px) {
+            #anchors a {
+                padding-top: 5px;
+                padding-bottom: 13px;
+                padding-left: 23px;
+                padding-right: 23px;
+                font-size: 12px;
+            }
+
+            #search_icon {
+                font-size: 17px;
+                padding: 3px;
+            }
+
+            #search_box input {
+                padding: 7px;
+            }
+
+            #search_box input.active {
+                width: 160px;
+            }
+
+            .bars {
+                width: 18px;
+                height: 2px;
+                margin: 0.5px;
+            }
+
+            #hamburger_menu {
+                height: 31px;
+                width: 31px;
+            }
+
+            #hamburger_menu.active .bars:nth-child(3) {
+                transform: rotate(-45deg) translateY(-2px) translateX(2px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <img src="./marvel_events.jpg" id="background">
+    <div id="main">
+        <nav id="main_nav_bar">
+            <img src="./marvel_logo.jpg" width="auto" height="auto">
+            <div id="anchors">
+                <div id="search_icon"><span><i class="fas fa-search magnifyingGlass"></i></span></div>
+                <div id="search_box"><input type="search" placeholder="Search Events..."></div>
+                <a href="#events_container" id="eventsnav"><span>Events</span></a>
+                <a href="#contact" id="aboutnav"><span>About Us</span></a>
+                <div id="hamburger_menu">
+                    <span
+                        style="display:flex;flex-direction:column;cursor:pointer;justify-content:center;align-items:center;">
+                        <span class="bars"></span>
+                        <span class="bars"></span>
+                        <span class="bars"></span>
+                    </span>
+
+                </div>
+            </div>
+        </nav>
+        <div id="cover">
+            <div id="navigation_menu">
+                <nav id="toggle_nav_bar" style="display:flex;flex-direction:column;">
+                    <ul>
+                        <li><a href="#events_container" id="eventsanchor">Events</a></li>
+                        <li><a href="#contact" id="aboutanchor">About Us</a></li>
+                    </ul>
+                </nav>
+
+            </div>
+            <div id="events_container" style="margin-bottom:40px;">
+                <div id="thumbnail"></div>
+                <div id="description">
+                    <header id="title"
+                        style="text-align:center;text-decoration:underline;font-size:large;font-weight:bold;"></header>
+                    <main>
+                        <p id="descriptionOfEvent"></p>
+                        <p id="characters"><span style="color:red;font-size:large">Characters</span>
+                        <div id="characterDetails">
+                            <ul list-style-type="circle"></ul>
+                        </div>
+                        </p>
+                        <p id="comics">
+                            <span style="color:red;font-size:large;">Comics</span>
+                        <div id="comicsDetails">
+                            <ul list-style-type="circle"></ul>
+                        </div>
+                        </p>
+                        <p id="series">
+                            <span style="color:red;font-size:large;">Series</span>
+                        <div id="seriesDetails">
+                            <ul list-style-type="circle"></ul>
+                        </div>
+                        </p>
+                        <p id="stories">
+                            <span style="color:red;font-size:large;">Stories</span>
+                        <div id="storiesDetails">
+                            <ul list-style-type="circle"></ul>
+                        </div>
+                        </p>
+                    </main>
+                </div>
+            </div>
+            <div id="end_para" style="margin-top:12px;text-align:center;width:100%;color:white;">Copyright &copy; 2025 .
+                All rights reserved by AlgoZenith.</div>
+        </div>
+    </div>
+    <div id="loader-overlay">
+        <img src="./spinner_logo.jpg" alt="Loading..." id="loader-shield">
+    </div>
+    <div id="loader2">
+        <div style="background-color:#B30838;" class="dots"></div>
+        <div style="background-color:#FFD700;" class="dots"></div>
+        <div style="background-color:#A9A9A9;" class="dots"></div>
+    </div>
+    <script>
+        document.getElementById('main_nav_bar').getElementsByTagName('img')[0].addEventListener('click',function(){
+            window.location.href='./index.html';
+        })
+        const public_api_key_1 = '25270e8a7fa745900ecb3311233bb2dd';
+        let ts = '';
+        let hash = '';
+        window.addEventListener('DOMContentLoaded', function () {
+            fetch('http://localhost:3000/api_keys')
+                .then(res => res.json())
+                .then((data) => {
+                    ts = data.ts1;
+                    hash = data.hash1;
+
+                    const marvelAPI = `https://gateway.marvel.com/v1/public/events?apikey=${public_api_key_1}&ts=${ts}&hash=${hash}&name=${encodeURIComponent("Civil War")}`;
+                    console.log(marvelAPI);
+                    return fetch(marvelAPI);
+                })
+                .then(res => res.json())
+                .then((data) => {
+                    const event = data.data.results[0];
+
+                    document.getElementById('title').textContent = event.title;
+                    document.getElementById('descriptionOfEvent').textContent = event.description;
+
+                    const thumbnailEvent = event.thumbnail;
+                    const imgSrc = `${thumbnailEvent.path}.${thumbnailEvent.extension}`;
+                    document.getElementById('thumbnail').innerHTML = `<img src="${imgSrc}" width="200px" height="150px">`;
+
+                    return Promise.all([
+                        fetch(`https://gateway.marvel.com/v1/public/events/${event.id}/characters?ts=${ts}&hash=${hash}&apikey=${public_api_key_1}&limit=10`).then(res => res.json()),
+                        fetch(`https://gateway.marvel.com/v1/public/events/${event.id}/comics?apikey=${public_api_key_1}&ts=${ts}&hash=${hash}&limit=100`).then(res => res.json()),
+                        fetch(`https://gateway.marvel.com/v1/public/events/${event.id}/series?apikey=${public_api_key_1}&ts=${ts}&hash=${hash}&limit=100`).then(res => res.json()),
+                        fetch(`https://gateway.marvel.com/v1/public/events/${event.id}/stories?apikey=${public_api_key_1}&ts=${ts}&hash=${hash}&limit=100`).then(res => res.json())
+                    ]);
+                })
+                .then(([charactersData, comicsData, seriesData, storiesData]) => {
+                    const characters = charactersData.data.results;
+                    const comics = comicsData.data.results;
+                    const series = seriesData.data.results;
+                    const stories = storiesData.data.results;
+
+                    const characterList = document.getElementById('characterDetails').getElementsByTagName('ul')[0];
+                    const comicsList = document.getElementById('comicsDetails').getElementsByTagName('ul')[0];
+                    const seriesList = document.getElementById('seriesDetails').getElementsByTagName('ul')[0];
+                    const storiesList = document.getElementById('storiesDetails').getElementsByTagName('ul')[0];
+
+                    characters.forEach((character) => {
+                        const listItem = document.createElement('li');
+                        listItem.textContent = character.name;
+                        characterList.appendChild(listItem);
+                    });
+
+                    comics.forEach((comic) => {
+                        const listItem = document.createElement('li');
+                        listItem.textContent = comic.title;
+                        comicsList.appendChild(listItem);
+                    });
+
+                    series.forEach((serie) => {
+                        const listItem = document.createElement('li');
+                        listItem.textContent = serie.title;
+                        seriesList.appendChild(listItem);
+                    });
+
+                    stories.forEach((story) => {
+                        const listItem = document.createElement('li');
+                        listItem.textContent = story.title;
+                        storiesList.appendChild(listItem);
+                    });
+                    document.getElementById('loader-overlay').style.display = 'none';
+                    document.getElementById('main').style.display = 'block';
+                    document.getElementById('main').style.position = 'relative';
+                    document.getElementById('main').style.width = '100vw';
+                    document.getElementById('main').style.margin = 'auto';
+                    document.getElementById('main').style.padding = '150px';
+                    document.getElementById('main').style.minHeight = '200vh';
+                    document.getElementById('main').style.overflowY = 'auto';
+                    document.getElementById('main').style.zIndex = '1';
+                    document.getElementById('background').style.display = 'block';
+                    document.getElementById('background').style.position = 'fixed';
+                    document.getElementById('background').style.top = '0';
+                    document.getElementById('background').style.left = '0';
+                    document.getElementById('background').style.width = '100vw';
+                    document.getElementById('background').style.height = '100vh';
+                    document.getElementById('background').style.objectFit = 'cover';
+                    document.getElementById('background').style.zIndex = '-1';
+                    document.getElementById('background').style.pointerEvents = 'none';
+                    document.getElementById('background').style.userSelect = 'none';
+
+                })
+                .catch((error) => {
+                    console.error(error);
+                    alert('A server-side error occurred. Refresh the page again.');
+                });
+
+        });
+        document.getElementById('search_icon').addEventListener('click', function () {
+            this.classList.add('active');
+            document.getElementById('search_box').classList.add('active');
+            document.getElementById('search_box').getElementsByTagName('input')[0].classList.add('active');
+        });
+        document.getElementById('search_box').getElementsByTagName('input')[0].addEventListener('blur', function () {
+            if (this.value == '') {
+                this.classList.remove('active');
+                document.getElementById('search_box').classList.remove('active');
+                document.getElementById('search_icon').classList.remove('active');
+            }
+        });
+        document.getElementById('hamburger_menu').addEventListener('click', () => {
+            document.getElementById('hamburger_menu').classList.toggle('active');
+            document.getElementById('navigation_menu').classList.toggle('active');
+            document.getElementById('main_nav_bar').classList.toggle('active');
+        });
+        document.addEventListener('click', function (e) {
+            if (((document.getElementById('search_box').style.display) != 'none') && (document.activeElement != (document.getElementById('search_box'))) && ((document.getElementById('search_box').contains(e.target)) == false) && ((document.getElementById('search_icon').contains(e.target)) == false)) {
+                document.getElementById('search_box').classList.remove('active');
+                document.getElementById('search_box').getElementsByTagName('input')[0].classList.remove('active');
+                document.getElementById('search_icon').classList.remove('active');
+            }
+        });
+        document.getElementById('search_box').addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                document.getElementById('loader2').style.position = 'fixed';
+                document.getElementById('loader2').style.top = '0';
+                document.getElementById('loader2').style.bottom = '0';
+                document.getElementById('loader2').style.display = 'flex';
+                document.getElementById('loader2').style.zIndex = '55';
+                document.getElementById('loader2').style.width = '100vw';
+                document.getElementById('loader2').style.height = '100vh';
+                document.getElementById('loader2').style.justifyContent = 'center';
+                document.getElementById('loader2').style.alignItems = 'center';
+                document.getElementById('loader2').style.backgroundColor = 'rgba(0,0,0,0.5)';
+                document.getElementById('loader2').style.backdropFilter = 'blur(5px)';
+                document.getElementById('main').style.zIndex = '-2';
+                document.getElementById('main').style.opacity = '0.5';
+                document.getElementById('background').style.zIndex = '-2';
+                document.getElementById('background').style.opacity = '0.5';
+                const userInput = this.getElementsByTagName('input')[0].value.trim();
+                fetch('http://localhost:3000/api_keys')
+                    .then(res => res.json())
+                    .then((data) => {
+                        ts = data.ts1;
+                        hash = data.hash1;
+
+                        const marvelAPI = `https://gateway.marvel.com/v1/public/events?apikey=${public_api_key_1}&ts=${ts}&hash=${hash}&name=${encodeURIComponent(userInput)}`;
+                        console.log(marvelAPI);
+                        return fetch(marvelAPI);
+                    })
+                    .then(res => res.json())
+                    .then((data) => {
+                        const event = data.data.results[0];
+
+                        document.getElementById('title').textContent = event.title;
+                        document.getElementById('descriptionOfEvent').textContent = event.description;
+
+                        const thumbnailEvent = event.thumbnail;
+                        const imgSrc = `${thumbnailEvent.path}.${thumbnailEvent.extension}`;
+                        document.getElementById('thumbnail').innerHTML = `<img src="${imgSrc}" width="200px" height="150px">`;
+
+                        return Promise.all([
+                            fetch(`https://gateway.marvel.com/v1/public/events/${event.id}/characters?apikey=${public_api_key_1}&ts=${ts}&hash=${hash}&limit=10`).then(res => res.json()),
+                            fetch(`https://gateway.marvel.com/v1/public/events/${event.id}/comics?apikey=${public_api_key_1}&ts=${ts}&hash=${hash}&limit=100`).then(res => res.json()),
+                            fetch(`https://gateway.marvel.com/v1/public/events/${event.id}/series?apikey=${public_api_key_1}&ts=${ts}&hash=${hash}&limit=100`).then(res => res.json()),
+                            fetch(`https://gateway.marvel.com/v1/public/events/${event.id}/stories?apikey=${public_api_key_1}&ts=${ts}&hash=${hash}&limit=100`).then(res => res.json())
+                        ]);
+                    })
+                    .then(([charactersData, comicsData, seriesData, storiesData]) => {
+                        const characterList = document.getElementById('characterDetails').getElementsByTagName('ul')[0]; const comicsList = document.getElementById('comicsDetails').getElementsByTagName('ul')[0]; const seriesList = document.getElementById('seriesDetails').getElementsByTagName('ul')[0]; const storiesList = document.getElementById('storiesDetails').getElementsByTagName('ul')[0];
+                        characterList.innerHTML = ''; comicsList.innerHTML = ''; seriesList.innerHTML = ''; storiesList.innerHTML = '';
+                        if (Object.entries(charactersData).length != 0 && charactersData.data.results.length != 0) {
+                            const characters = charactersData.data.results;
+                            characters.forEach((character) => {
+                                const listItem = document.createElement('li');
+                                listItem.textContent = character.name;
+                                characterList.appendChild(listItem);
+                            });
+                        } else {
+                            const listItem = document.createElement('li');
+                            listItem.textContent = 'No Characters!';
+                            characterList.appendChild(listItem);
+                        }
+                        if (Object.entries(comicsData).length != 0 && comicsData.data.results.length != 0) {
+                            const comics = comicsData.data.results;
+                            comics.forEach((comic) => {
+                                const listItem = document.createElement('li');
+                                listItem.textContent = comic.title;
+                                comicsList.appendChild(listItem);
+                            });
+                        } else {
+                            const listItem = document.createElement('li');
+                            listItem.textContent = 'No Comics!';
+                            comicsList.appendChild(listItem);
+                        }
+                        if (Object.entries(seriesData).length != 0 && seriesData.data.results.length != 0) {
+                            const series = seriesData.data.results;
+                            series.forEach((serie) => {
+                                const listItem = document.createElement('li');
+                                listItem.textContent = serie.title;
+                                seriesList.appendChild(listItem);
+                            });
+                        } else {
+                            const listItem = document.createElement('li');
+                            listItem.textContent = 'No Series!';
+                            seriesList.appendChild(listItem);
+                        }
+                        if (Object.entries(storiesData).length != 0 && storiesData.data.results.length != 0) {
+                            const stories = storiesData.data.results;
+                            stories.forEach((story) => {
+                                const listItem = document.createElement('li');
+                                listItem.textContent = story.title;
+                                storiesList.appendChild(listItem);
+                            });
+                        } else {
+                            const listItem = document.createElement('li');
+                            listItem.textContent = 'No Stories!';
+                            storiesList.appendChild(listItem);
+                        }
+                        document.getElementById('loader2').style.removeProperty('position');
+                        document.getElementById('loader2').style.removeProperty('top');
+                        document.getElementById('loader2').style.removeProperty('bottom');
+                        document.getElementById('loader2').style.removeProperty('zIndex');
+                        document.getElementById('loader2').style.display = 'none';
+                        document.getElementById('main').style.zIndex = '1';
+                        document.getElementById('main').style.removeProperty('opacity');
+                        document.getElementById('background').style.zIndex = '-1';
+                        document.getElementById('background').style.removeProperty('opacity');
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                        alert('A server-side error occurred. Refresh the page again.');
+                    });
+            }
+        });
+    </script>
+</body>
+
+</html>

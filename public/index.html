@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bitcount+Grid+Single:wght@100..900&family=Lexend+Giga:wght@100..900&family=Noto+Serif+Todhri&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <title>MarvelPedia</title>
+    <link rel="icon" href="./captain_america_shield.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            width: 100%;
+            background-image: url("./home_background.png");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            transition: background 0.5s ease-in-out;
+        }
+
+
+
+        .nav-bar {
+            height: 8vh;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: rgba(236, 34, 34, 0.966);
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            padding: 0 2rem;
+        }
+
+        .nav-bar img {
+            height: 7vh;
+        }
+
+        .nav-bar nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+            font-size: 20px;
+        }
+
+        .nav-bar nav ul a {
+            color: rgb(255, 255, 255);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+
+        .toggle_btn {
+            color: aliceblue;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: none;
+        }
+
+        #close-icon {
+            display: none;
+        }
+
+
+
+        .dropdown_menu {
+            display: block;
+            position: fixed;
+            right: 2rem;
+            top: 8vh;
+            width: 300px;
+            background: rgba(10, 10, 10, 0.5);
+            backdrop-filter: blur(15px);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: height 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            height: 0;
+            z-index: 99;
+        }
+
+        .dropdown_menu.open {
+            height: 105px;
+        }
+
+        .dropdown_menu li {
+            padding: 0.7rem;
+            list-style: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dropdown_menu li a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+        }
+
+        main {
+            padding-top: 8vh;
+        }
+
+        .inner-body {
+            width: 100%;
+            min-height: calc(100vh - 8vh - 30vh);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .inner-body .box {
+            min-height: 400px;
+            width: 90%;
+            max-width: 500px;
+            background-color: #ff0d00;
+            color: #fff;
+            font-family: "Bitcount Grid Single", system-ui;
+            font-size: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            border: 1px solid rgb(0, 149, 255, 0.9);
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .inner-body .box button {
+            width: 200px;
+            height: 40px;
+            border: 2px solid rgb(8, 123, 255);
+            border-radius: 10px;
+            color: rgb(0, 0, 0);
+            background-color: blanchedalmond;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .mainfooter {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            width: 100%;
+            min-height: 30vh;
+            background-color: black;
+            color: white;
+            padding: 1rem;
+        }
+
+        .mainfooter img {
+            height: 25vh;
+            width: auto;
+        }
+
+        .footer-sction {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 1rem;
+            max-width: 600px;
+        }
+
+        .foot .icons {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .foot .icons i {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 50px;
+            width: 50px;
+            border-radius: 50%;
+            background-color: #363D73;
+        }
+
+        @media (max-width: 992px) {
+
+            .nav-bar nav {
+                display: none;
+            }
+
+            .toggle_btn {
+                display: block;
+            }
+
+            .mainfooter {
+                flex-direction: column;
+                text-align: center;
+                gap: 2rem;
+                padding: 2rem 1rem;
+            }
+
+
+            .footer-sction {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 1.5rem;
+            }
+
+
+            .foot {
+                width: 100%;
+            }
+
+            .foot .icons {
+                width: 100%;
+                display: flex;
+                justify-content: space-around;
+            }
+        }
+
+
+        @media (max-width: 576px) {
+            .dropdown_menu {
+                left: 2rem;
+                width: calc(100% - 4rem);
+            }
+
+            .mainfooter {
+                flex-direction: column;
+                text-align: center;
+                gap: 2rem;
+                padding: 2rem 1rem;
+            }
+
+
+            .footer-sction {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 1.5rem;
+            }
+
+            .foot {
+                width: 100%;
+            }
+
+            .foot .icons {
+                width: 100%;
+                display: flex;
+                justify-content: center;
+            }
+        }
+
+        #loader-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: transparent;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            display: none;
+            pointer-events: none;
+            background: radial-gradient(circle, #4c0000, #000000);
+        }
+
+        #loader-overlay img {
+            border: red solid;
+            border-radius: 500px;
+            background-size: cover;
+        }
+
+
+
+        #loader-shield {
+            width: 150px;
+            height: 150px;
+            pointer-events: auto;
+            animation: spin 1s linear infinite;
+            border-radius: 50%;
+            box-shadow: 0 0 15px 5px rgba(255, 0, 0, 0.7);
+        }
+
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+
+        }
+
+        body.loading-active {
+            background: radial-gradient(circle, #330a0a, #101010);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="loader-overlay">
+        <img src="./spinner_logo.jpg" alt="Loading..." id="loader-shield">
+    </div>
+    <header>
+
+        <div class="nav-bar">
+            <img src="./marvel_logo.jpg" alt="Marvel Logo">
+            <nav>
+                <ul>
+                    <li><a id="about" style="cursor:pointer;">About Us</a></li>
+                    <li><a id="fanzone" style="cursor:pointer;">FAN-ZONE</a></li>
+                </ul>
+            </nav>
+            <div class="toggle_btn">
+                <i id="menu-icon" class="fa-solid fa-bars"></i>
+                <i id="close-icon" class="fa-solid fa-xmark"></i>
+            </div>
+        </div>
+
+        <div class="dropdown_menu">
+            <ul>
+                <li><a id="aboutDM" style="cursor:pointer;">About Us</a></li>
+                <li><a id="fanzoneDM" style="cursor:pointer;">FAN-ZONE</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <main>
+        <div class="inner-body">
+            <div class="box">
+                <p>SELECT THE CATEGORY YOU HAVE BEEN LOOKING FOR...</p>
+                <button id="events">EVENTS</button>
+                <button id="characters">CHARACTERS</button>
+                <button id="comics">COMICS</button>
+                <button id="fanZone">FAN-ZONE</button>
+            </div>
+        </div>
+    </main>
+
+    <div class="mainfooter">
+        <img src="./avengers_logo.jpg" alt="">
+        <div class="footer-sction">
+            <div class="footer-para">
+                <b>WELCOME!!<i class="fa-solid fa-face-smile"></i></b>
+                <p>At MarvelPedia , we are bringing you the legendary world of Marvel, its tales, characters and comics.
+                    From timeless
+                    classics to the latest releases, our mission is to celebrate the heroes, villains, and epic sagas
+                    that have
+                    inspired generations. Whether you are here to revisit iconic storylines or dive into new adventures,
+                    we've got
+                    you covered! Step into this iconic Marvel collection and discover your favourites!</p>
+            </div>
+            <p>Copyright © 2025 All rights reserved by ALGOZENITH<i class="fa-solid fa-heart" style="color: brown;"></i>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('fanzone').addEventListener('click',function(){
+            window.location.href='./fanpage.html';
+        });
+        document.getElementById('fanzoneDM').addEventListener('click',function(){
+            window.location.href='./fanpage.html';
+        });
+        document.getElementById('about').addEventListener('click',function(){
+            window.location.href='./about.html';
+        });     
+        document.getElementById('aboutDM').addEventListener('click',function(){
+            window.location.href='./about.html';
+        });            
+        const toggleBtn = document.querySelector('.toggle_btn');
+        const menuIcon = document.querySelector('#menu-icon');
+        const closeIcon = document.querySelector('#close-icon');
+        const dropDownMenu = document.querySelector('.dropdown_menu');
+
+
+        toggleBtn.onclick = function () {
+            dropDownMenu.classList.toggle('open');
+            const isOpen = dropDownMenu.classList.contains('open');
+
+            if (isOpen) {
+                menuIcon.style.display = 'none';
+                closeIcon.style.display = 'block';
+            } else {
+                menuIcon.style.display = 'block';
+                closeIcon.style.display = 'none';
+            }
+        };
+
+
+        const loaderOverlay = document.getElementById('loader-overlay');
+        const clickableElements = document.querySelectorAll('.nav-bar a, .dropdown_menu a');
+        function showLoader(event) {
+            event.preventDefault();
+            document.body.classList.add('loading-active');
+            loaderOverlay.style.display = 'flex';
+
+            setTimeout(() => {
+
+                document.body.classList.remove('loading-active');
+
+                loaderOverlay.style.display = 'none';
+
+                console.log('Loading complete!');
+
+            }, 700);
+        }
+        document.getElementById('events').addEventListener('click',function(e){
+            showLoader(e);window.location.href='./events.html';
+        });
+        document.getElementById('characters').addEventListener('click',function(e){
+            showLoader(e);window.location.href='./characters.html';
+        });
+        document.getElementById('comics').addEventListener('click',function(e){
+            showLoader(e);window.location.href='./comics.html';
+        });
+        document.getElementById('fanZone').addEventListener('click',function(e){
+            showLoader(e);window.location.href='./fanpage.html';
+        });
+
+        clickableElements.forEach(element => {
+            element.addEventListener('click', showLoader);
+        });
+    </script>
+</body>
+
+</html>

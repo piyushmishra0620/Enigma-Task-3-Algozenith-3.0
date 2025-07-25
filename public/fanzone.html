@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MarvelPedia</title>
+  <link rel="icon" href="./captain_america_shield.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #000;
+      color: #fff;
+    }
+
+    header {
+      background-color: #b91c1c;
+      padding: 1rem;
+      text-align: center;
+      font-size: 2rem;
+      font-weight: bold;
+    }
+
+    section {
+      padding: 2rem;
+    }
+
+    .gallery .images {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .gallery img {
+      width: 300px;
+      height: 300px;
+      object-fit: cover;
+      border-radius: 0.5rem;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+    }
+
+    .poll,
+    .quiz,
+    .feedback {
+      background-color: #111827;
+      border-radius: 0.5rem;
+      margin-top: 2rem;
+      align-items: center;
+      text-align: center;
+
+    }
+
+    .vote-options {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      margin: 0 auto;
+    }
+
+
+    .center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      justify-content: center;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    button {
+      background-color: #2e5cb8;
+      color: white;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 0.25rem;
+      cursor: pointer;
+      margin-top: 1rem;
+      align-items: center;
+      text-align: center;
+    }
+
+    button:hover {
+      background-color: #528fac;
+    }
+
+    .quiz .options button {
+      display: block;
+      margin: 0.5rem 0;
+      width: 100%;
+      max-width: 300px;
+    }
+
+    .f {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    textarea {
+      width: 100%;
+      padding: 1rem;
+      color: #000;
+      border-radius: 0.25rem;
+    }
+
+    footer {
+      background-color: #b92e2e;
+      text-align: center;
+      padding: 1rem;
+      margin-top: 2rem;
+      font-size: 0.9rem;
+    }
+
+    #iconContainer {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      height: 100px;
+    }
+
+    #icon {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 75px;
+      width: 75px;
+      border-radius: 50%;
+      background-color: black;
+      border: 2px solid white;
+      cursor: pointer;
+    }
+
+    #icon i {
+      color: white;
+    }
+
+    body {
+      background-image: url('https://wallpapers.com/images/featured/4k-marvel-awrqh8lcgyk3crjc.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      color: white;
+    }
+
+    .overlay {
+      background-color: rgba(0, 0, 0, 0.6);
+      padding: 20px;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="overlay"></div>
+  <header>
+    <h1>Marvel Fan Zone</h1>
+  </header>
+
+  <section class="gallery">
+    <h2>🎨 Fan Art Gallery</h2>
+    <div class="images">
+      <img
+        src="https://cdn.shopify.com/s/files/1/1140/8354/files/1._Paint_Your_Superhero_on_Canvas_480x480.jpg?v=1635259672"
+        alt="Fan Art 1">
+      <img src="https://i.pinimg.com/736x/ce/a8/0b/cea80b8bb34f3dafe36244e54a6185ef.jpg" alt="Fan Art 2">
+      <img src="https://artofentertainment.com/cdn/shop/collections/Spiderman_vs._the_Sinister_Six.jpg?v=1675796461"
+        alt="Fan Art 3">
+      <img src="https://static1.srcdn.com/wordpress/wp-content/uploads/2023/07/fan-art-fox-characters-deadpool-3.jpg"
+        alt="Fan Art 4">
+    </div>
+  </section>
+
+  <section class="poll">
+    <h2>🗳️ Who's Your Favorite Marvel Character?</h2>
+    <form id="pollForm">
+      <label><input type="radio" name="character" value="Iron Man"> Iron Man</label><br>
+      <label><input type="radio" name="character" value="Spider-Man"> Spider-Man</label><br>
+      <label><input type="radio" name="character" value="Captain America"> Captain America</label><br>
+      <label><input type="radio" name="character" value="Thor"> Thor</label><br>
+      <label><input type="radio" name="character" value="Hulk"> Hulk</label><br>
+      <label><input type="radio" name="character" value="Scarlet Witch"> Scarlet Witch</label><br>
+      <label><input type="radio" name="character" value="Wolverine"> Wolverine</label><br>
+      <label><input type="radio" name="character" value="Black Panther"> Black Panther</label><br>
+      <button type="button" onclick="submitPoll()">Vote</button>
+    </form>
+    <p id="pollResult"></p>
+  </section>
+
+  <section class="quiz">
+    <div class="center">
+      <h2>🧠 Marvel Quiz</h2>
+      <p>Q. What is Captain America's shield made of?</p>
+      <div class="options">
+        <button class="btn" onclick="checkAnswer(this, false)">Adamantium</button>
+        <button class="btn" onclick="checkAnswer(this, true)">Vibranium</button>
+        <button class="btn" onclick="checkAnswer(this, false)">Titanium</button>
+        <button class="btn" onclick="checkAnswer(this, false)">Carbon Fiber</button>
+      </div>
+      <p claclass="quizFeedback"></p>
+      <p>Q. What is the real name of Iron Man?</p>
+      <div class="options">
+        <button class="btn" onclick="checkAnswer(this, true)">Tony Stark</button>
+        <button class="btn" onclick="checkAnswer(this, false)">Steve Rogers</button>
+        <button class="btn" onclick="checkAnswer(this, false)">Bruce Banner</button>
+        <button class="btn" onclick="checkAnswer(this, false)">Clint Barton</button>
+      </div>
+      <p class="quizFeedback"></p>
+      <p>Q. Who is the king of Wakanda?</p>
+      <div class="options">
+        <button class="btn" onclick="checkAnswer(this, true)">T'Challa</button>
+        <button class="btn" onclick="checkAnswer(this, false)">M'Baku</button>
+        <button class="btn" onclick="checkAnswer(this, false)">Killmonger</button>
+        <button class="btn" onclick="checkAnswer(this, false)">Falcon</button>
+      </div>
+      <p class="quizFeedback"></p>
+      <p>Q. Which Infinity Stone does Vision have?</p>
+      <div class="options">
+        <button class="btn" onclick="checkAnswer(this, false)">Space Stone</button>
+        <button class="btn" onclick="checkAnswer(this, false)">Reality Stone</button>
+        <button class="btn" onclick="checkAnswer(this, true)">Mind Stone</button>
+        <button class="btn" onclick="checkAnswer(this, false)">Time Stone</button>
+      </div>
+      <p class="quizFeedback"></p>
+      <p>Q. What is Spider-Man's aunt's name?</p>
+      <div class="options">
+        <button class="btn" onclick="checkAnswer(this, false)">Aunt June</button>
+        <button class="btn" onclick="checkAnswer(this, true)">Aunt May</button>
+        <button class="btn" onclick="checkAnswer(this, false)">Aunt Mary</button>
+        <button class="btn" onclick="checkAnswer(this, false)">Aunt Jane</button>
+      </div>
+      <p class="quizFeedback"></p>
+
+    </div>
+  </section>
+
+  <section class="feedback">
+    <h2>💬 Share Your Marvel Moments</h2>
+    <div class="f">
+      <textarea placeholder="Tell us your favorite Marvel scene or memory..."></textarea>
+    </div>
+    <button>Submit</button>
+  </section>
+
+  <footer>
+    <div id="iconContainer">
+      <div id="icon"><i class="fas fa-house fa-2x"></i></div>
+    </div>
+    <p>Copyright &copy; 2025 . All rights reserved by AlgoZenith.</p>
+  </footer>
+  
+  <script>
+    document.getElementById('icon').addEventListener('click', function () {
+      window.location.href = './index.html';
+    });
+    function submitPoll() {
+      const choice = document.querySelector('input[name="character"]:checked');
+      const result = document.getElementById("pollResult");
+      if (choice) {
+        result.textContent = `You voted for ${choice.value}!`;
+      } else {
+        result.textContent = "Please select an option before voting.";
+      }
+    }
+    function checkAnswer(button, isCorrect) {
+      const optionsContainer = button.parentElement;
+
+      if (optionsContainer.classList.contains('answered')) return;
+
+      optionsContainer.classList.add('answered');
+
+      const buttons = optionsContainer.querySelectorAll('button');
+
+      buttons.forEach(btn => {
+        btn.disabled = true;
+        if (btn === button && isCorrect) {
+          btn.style.backgroundColor = 'green';
+          btn.style.color = 'white';
+        } else if (btn === button && !isCorrect) {
+          btn.style.backgroundColor = 'red';
+          btn.style.color = 'white';
+        }
+      });
+
+      if (!isCorrect) {
+        buttons.forEach(btn => {
+          if (btn.getAttribute('onclick')?.includes('true')) {
+            btn.style.backgroundColor = 'green';
+            btn.style.color = 'white';
+          }
+        });
+      }
+    }
+    button.classList.add(isCorrect ? "correct" : "wrong");
+    const feedback = document.getElementById("quizFeedback");
+    feedback.textContent = isCorrect
+      ? "Correct! Vibranium is the right answer."
+      : "Oops! That's not right.";
+    const feedbacks = document.querySelectorAll('.quizFeedback');
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MarvelPedia</title>
+  <link rel="icon" href="./captain_america_shield.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100vw;
+      background-color: rgba(0, 0, 0, 0.815);
+      scroll-behavior: smooth;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      min-height: 100vh;
+      overflow-y: scroll;
+      overflow-x: hidden;
+    }
+
+    #main {
+      display: none;
+    }
+
+    #background {
+      display: none;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      font-size: 2rem;
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      width: 60%;
+      max-width: 400px;
+      border-radius: 5px;
+      border: none;
+      margin-right: 10px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background: #e62429;
+      border: none;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #c41f24;
+    }
+
+    .results {
+      margin-top: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .comic-card {
+      background-color: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(5px);
+      color: #000;
+      padding: 20px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      text-align: left;
+    }
+
+    .comic-card h2 {
+      color: white;
+      text-align: center;
+    }
+
+    .comic-card p {
+      color: white;
+    }
+
+    .comic-card img {
+      width: 100%;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+
+    #iconContainer {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      height: 100px;
+    }
+
+    #icon {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 75px;
+      width: 75px;
+      border-radius: 50%;
+      background-color: black;
+      border: 2px solid red;
+      cursor: pointer;
+    }
+
+    #icon i {
+      color: red;
+    }
+
+    #loader-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: transparent;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 55;
+      display: flex;
+      pointer-events: none;
+      background: radial-gradient(circle, #4c0000, #000000);
+    }
+
+    #loader-overlay img {
+      border: red solid;
+      border-radius: 500px;
+      background-size: cover;
+    }
+
+    #loader-shield {
+      width: 150px;
+      height: 150px;
+      pointer-events: auto;
+      animation: spin 1s linear infinite;
+      border-radius: 50%;
+      box-shadow: 0 0 15px 5px rgba(255, 0, 0, 0.7);
+    }
+
+    #loader2 {
+      display: none;
+    }
+
+    .dots {
+      display: block;
+      animation: symphonical_bounce 1s infinite;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      margin: 4px;
+    }
+
+    .dots:nth-child(1) {
+      animation-delay: 0s;
+    }
+
+    .dots:nth-child(2) {
+      animation-delay: 0.25s;
+    }
+
+    .dots:nth-child(3) {
+      animation-delay: 0.5s;
+    }
+
+    @keyframes spin {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
+
+    }
+
+    @keyframes symphonical_bounce {
+      0% {
+        transform: translateY(-15px);
+      }
+
+      50% {
+        transform: translateY(-7.5px);
+      }
+
+      100% {
+        transform: translateY(0px);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <img id="background" src="./comics_marvel.jpg">
+  <div id="main">
+    <header>
+      <h1>Marvel Comics Search</h1>
+      <input type="text" id="comicInput" placeholder="Enter comic title..." />
+      <button>Search</button>
+    </header>
+
+    <div class="results" id="results"></div>
+    <div id="iconContainer">
+      <div id="icon"><i class="fas fa-house fa-2x"></i></div>
+    </div>
+    <div id="footer" style="margin-top:12px;text-align:center;width:100%;color:white;font-size:large;">Copyright &copy;
+      2025 .
+      All rights reserved by AlgoZenith.</div>
+  </div>
+  <div id="loader-overlay">
+    <img src="./spinner_logo.jpg" alt="Loading..." id="loader-shield">
+  </div>
+  <div id="loader2">
+    <div style="background-color:#B30838" class="dots"></div>
+    <div style="background-color:#FFD700" class="dots"></div>
+    <div style="background-color:#A9A9A9" class="dots"></div>
+  </div>
+  <script>
+    document.getElementById('icon').addEventListener('click',function(){
+      window.location.href='./index.html';
+    });
+    const public_api_key_1 = '2d33711408eb7c8bf7bdf21592721537';
+    let ts = '';
+    let hash = '';
+    window.addEventListener('DOMContentLoaded', function () {
+      fetch('http://localhost:3000/api_keys')
+        .then(res => res.json())
+        .then((data) => {
+          ts = data.ts2;
+          hash = data.hash2;
+
+          const url = `https://gateway.marvel.com/v1/public/comics?apikey=${public_api_key_1}&ts=${ts}&hash=${hash}&title=${encodeURIComponent("avengers")}`;
+          return fetch(url);
+        })
+        .then(res => res.json())
+        .then((data) => {
+          const results = data.data.results;
+          const container = document.getElementById("results");
+          container.innerHTML = "";
+
+          if (results.length === 0) {
+            container.innerHTML = "<p>No comics found.</p>";
+            return;
+          }
+
+          results.forEach(comic => {
+            const div = document.createElement("div");
+            div.className = "comic-card";
+            div.innerHTML = `
+                <h2>${comic.title}</h2>
+                <p>${comic.description || "No description available."}</p>
+                <img src="${comic.thumbnail.path}.${comic.thumbnail.extension}" />
+            `;
+            container.appendChild(div);
+          });
+          document.getElementById('loader-overlay').style.display = 'none';
+          document.getElementById('main').style.display = 'block';
+          document.getElementById('main').style.fontFamily = '"Segoe UI", sans-serif';
+          document.getElementById('main').style.width = '100vw';
+          document.getElementById('main').style.margin = 'auto';
+          document.getElementById('main').style.color = 'white';
+          document.getElementById('main').style.padding = '30px';
+          document.getElementById('main').style.textAlign = 'center';
+          document.getElementById('main').style.minHeight = '100vh';
+          document.getElementById('main').style.zIndex = '1';
+          document.getElementById('main').style.overflowY = 'auto';
+          document.getElementById('background').style.display = 'block';
+          document.getElementById('background').style.position = 'fixed';
+          document.getElementById('background').style.top = '0';
+          document.getElementById('background').style.left = '0';
+          document.getElementById('background').style.width = '100vw';
+          document.getElementById('background').style.height = '100vh';
+          document.getElementById('background').style.objectFit = 'cover';
+          document.getElementById('background').style.zIndex = '-1';
+          document.getElementById('background').style.pointerEvents = 'none';
+          document.getElementById('background').style.userSelect = 'none';
+        })
+        .catch((err) => {
+          console.error(err);
+          alert("Error fetching data from Marvel API.");
+        });
+    });
+    document.getElementsByTagName('button')[0].addEventListener('click', function fetchComics() {
+      document.getElementById('loader2').style.position = 'fixed';
+      document.getElementById('loader2').style.top = '0';
+      document.getElementById('loader2').style.bottom = '0';
+      document.getElementById('loader2').style.display = 'flex';
+      document.getElementById('loader2').style.zIndex = '55';
+      document.getElementById('loader2').style.width = '100vw';
+      document.getElementById('loader2').style.height = '100vh';
+      document.getElementById('loader2').style.justifyContent = 'center';
+      document.getElementById('loader2').style.alignItems = 'center';
+      document.getElementById('loader2').style.backgroundColor = 'rgba(0,0,0,0.5)';
+      document.getElementById('loader2').style.backdropFilter = 'blur(5px)';
+      document.getElementById('main').style.zIndex = '-2';
+      document.getElementById('main').style.opacity = '0.5';
+      document.getElementById('background').style.zIndex = '-2';
+      document.getElementById('background').style.opacity = '0.5';
+      const query = document.getElementById("comicInput").value.trim();
+      if (!query) return alert("Please enter a comic title.");
+      fetch('http://localhost:3000/api_keys')
+        .then(res => res.json())
+        .then((data) => {
+          ts = data.ts2;
+          hash = data.hash2;
+
+          const url = `https://gateway.marvel.com/v1/public/comics?apikey=${public_api_key_1}&ts=${ts}&hash=${hash}&title=${encodeURIComponent(query)}`;
+          return fetch(url);
+        })
+        .then(res => res.json())
+        .then((data) => {
+          const results = data.data.results;
+          const container = document.getElementById("results");
+          container.innerHTML = "";
+
+          if (results.length === 0) {
+            container.innerHTML = "<p>No comics found.</p>";
+            return;
+          }
+
+          results.forEach(comic => {
+            const div = document.createElement("div");
+            div.className = "comic-card";
+            div.innerHTML = `
+                <h2>${comic.title}</h2>
+                <p>${comic.description || "No description available."}</p>
+                <img src="${comic.thumbnail.path}.${comic.thumbnail.extension}" />
+            `;
+            container.appendChild(div);
+          });
+          document.getElementById('loader2').style.removeProperty('position');
+          document.getElementById('loader2').style.removeProperty('top');
+          document.getElementById('loader2').style.removeProperty('bottom');
+          document.getElementById('loader2').style.removeProperty('zIndex');
+          document.getElementById('loader2').style.display = 'none';
+          document.getElementById('main').style.zIndex = '1';
+          document.getElementById('main').style.removeProperty('opacity');
+          document.getElementById('background').style.zIndex = '-1';
+          document.getElementById('background').style.removeProperty('opacity');
+        })
+        .catch((err) => {
+          console.error(err);
+          alert("Error fetching data from Marvel API.");
+        });
+    })
+
+  </script>
+</body>
+
+</html>

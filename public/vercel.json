@@ -1,0 +1,10 @@
+{
+    "rewrites":[
+        {"source":"/events","destination":"/events.html"},
+        {"source":"/characters","destination":"/characters.html"},
+        {"source":"/comics","destination":"/comics.html"},
+        {"source":"/fan-zone","destination":"/fanzone.html"},
+        {"source":"/about-us","destination":"/about.html"},
+        {"source":"/","destination":"index.html"}
+    ]
+}

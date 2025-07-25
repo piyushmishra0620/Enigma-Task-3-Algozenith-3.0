@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MarvelPedia</title>
+    <link rel="icon" href="./captain_america_shield.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            background-color: rgba(0, 0, 0, 0.815);
+            scroll-behavior: smooth;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+            min-height: 100vh;
+            overflow-y: scroll;
+            overflow-x: hidden;
+        }
+
+        #main {
+            display: none;
+        }
+
+        #background {
+            display: none;
+        }
+
+        .container {
+            background-color: #171821;
+            width: 90%;
+            max-width: 500px;
+            min-width: 300px;
+            padding: 3rem 2rem;
+            margin-top: 16px;
+            margin-bottom: 0px;
+            margin-left: auto;
+            margin-right: auto;
+            border-radius: 1rem;
+        }
+
+        .input-container {
+            display: grid;
+            grid-template-columns: 9fr 3fr;
+            gap: 1em;
+
+        }
+
+        input {
+            padding: 1em 0.5em;
+            background-color: #3a3939;
+            color: #fff;
+            border: none;
+            border-radius: 0.5em;
+        }
+
+        button {
+            outline: none;
+            border: none;
+            background-color: red;
+            color: #fff;
+            border-radius: 0.5em;
+            cursor: pointer;
+        }
+
+        @media(max-width:650px) {
+            button {
+                font-size: 9px;
+            }
+        }
+
+        button:active {
+            background-color: rgb(248, 76, 76);
+        }
+
+        .display-container {
+            padding: 1em;
+
+        }
+
+        .container-character-image {
+            background-color: #ffffff;
+            padding: 0.5em;
+            height: 9.37em;
+            width: 9.37em;
+            display: block;
+            margin: auto;
+            border-radius: 50%;
+        }
+
+        .container-character-image img {
+            width: 100%;
+            position: relative;
+            width: block;
+            border-radius: 50%;
+        }
+
+        .character-name {
+            padding: 0.5em 0 0.8em 0;
+            text-align: center;
+            color: #ffffff;
+            text-transform: uppercase;
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+
+        .character-description {
+            text-align: justify;
+            color: #a0a0a6;
+            line-height: 2em;
+            font-weight: 300;
+        }
+
+        #iconContainer {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            height: 100px;
+            display: none;
+        }
+
+        #icon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 75px;
+            width: 75px;
+            border-radius: 50%;
+            background-color: black;
+            border: 2px solid red;
+            cursor: pointer;
+        }
+
+        #icon i {
+            color: red;
+        }
+
+        #footer {
+            margin-top: 12px;
+            text-align: center;
+            width: 100%;
+            color: white;
+            font-size: large;
+            display: none;
+        }
+
+        #loader-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: transparent;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 55;
+            display: flex;
+            pointer-events: none;
+            background: radial-gradient(circle, #4c0000, #000000);
+        }
+
+        #loader-overlay img {
+            border: red solid;
+            border-radius: 500px;
+            background-size: cover;
+        }
+
+        #loader-shield {
+            width: 150px;
+            height: 150px;
+            pointer-events: auto;
+            animation: spin 1s linear infinite;
+            border-radius: 50%;
+            box-shadow: 0 0 15px 5px rgba(255, 0, 0, 0.7);
+        }
+
+        #loader2 {
+            display: none;
+        }
+
+        .dots {
+            display: block;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            margin: 4px;
+            animation: symphonical_bounce 1s infinite;
+        }
+
+        .dots:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .dots:nth-child(2) {
+            animation-delay: 0.25s;
+        }
+
+        .dots:nth-child(3) {
+            animation-delay: 0.5s;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+
+        }
+
+        @keyframes symphonical_bounce {
+            0% {
+                transform: translateY(-15px);
+            }
+
+            50% {
+                transform: translateY(-7.5px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <img src="./characters_marvel.jpg" id="background">
+    <div id="main">
+        <div class="container">
+            <div class="input-container">
+                <input type="text" class="input-box" id="input-box">
+                <button class="button" id="submit-button">SUBMIT</button>
+            </div>
+            <div class="display-container" id="show-container">
+            </div>
+        </div>
+    </div>
+    <div id="iconContainer">
+        <div id="icon"><i class="fas fa-house fa-2x" href="./index.html"></i></div>
+    </div>
+    <div id="footer">Copyright
+        &copy; 2025 .
+        All rights reserved by AlgoZenith.</div>
+    <div id="loader-overlay">
+        <img src="./spinner_logo.jpg" alt="Loading..." id="loader-shield">
+    </div>
+    <div id="loader2">
+        <div style="background-color:#B30838" class="dots"></div>
+        <div style="background-color:#FFD700" class="dots"></div>
+        <div style="background-color:#A9A9A9;" class="dots"></div>
+    </div>
+</body>
+<script>
+    document.getElementById('icon').addEventListener('click', function () {
+        window.location.href = './index.html';
+    });
+    let showContainer = document.getElementById('show-container');
+    let inputBox = document.getElementById('input-box');
+    let searchBtn = document.getElementById('submit-button');
+    let public_api_key = 'cfc9f667f754212fb83dd3a351dd76c9';
+    let ts = ''; let hash = '';
+    window.addEventListener('DOMContentLoaded', function () {
+        fetch('http://localhost:3000/api_keys')
+            .then(res => res.json()
+            ).then((data) => {
+                ts = data.ts3; hash = data.hash3;
+                return fetch(`https://gateway.marvel.com/v1/public/characters?apikey=${public_api_key}&ts=${ts}&hash=${hash}&name=${encodeURIComponent("Iron man")}`);
+            }).then(res => res.json()).then((data) => {
+                data.data["results"].forEach((ele) => {
+                    let image = `${ele.thumbnail.path}.${ele.thumbnail.extension}`;
+                    showContainer.innerHTML = `<div class="card-container"><div class="container-character-image"><img src="${image}"/></div><div class="character-name">${ele.name}</div><div class="character-description">${ele.description}</div></div>`;
+                });
+                document.getElementById('iconContainer').style.display = 'flex';
+                document.getElementById('loader-overlay').style.display = 'none';
+                document.getElementById('main').style.padding = '150px';
+                document.getElementById('main').style.paddingBottom = '30px';
+                document.getElementById('main').style.position = 'relative';
+                document.getElementById('main').style.width = '100vw';
+                document.getElementById('main').style.margin = 'auto';
+                document.getElementById('main').style.zIndex = '1';
+                document.getElementById('main').style.overflowY = 'auto';
+                document.getElementById('main').style.display = 'flex';
+                document.getElementById('main').style.justifyContent = 'center';
+                document.getElementById('main').style.minHeight = '100vh';
+                document.getElementById('background').style.display = 'block';
+                document.getElementById('background').style.position = 'fixed';
+                document.getElementById('background').style.top = '0';
+                document.getElementById('background').style.left = '0';
+                document.getElementById('background').style.width = '100vw';
+                document.getElementById('background').style.height = '100vh';
+                document.getElementById('background').style.objectFit = 'cover';
+                document.getElementById('background').style.zIndex = '-1';
+                document.getElementById('background').style.pointerEvents = 'none';
+                document.getElementById('background').style.userSelect = 'none';
+                document.getElementById('footer').style.display = 'block';
+            }).catch((error) => { alert("A server-side error .Try refreshing the page again."); });
+    });
+    searchBtn.addEventListener('click', function () {
+        let inputVal = inputBox.value.trim();
+        if (inputVal.length < 1) {
+            alert("Input can't be empty!");
+            return;
+        } else {
+            showContainer.innerHTML = '';
+            document.getElementById('loader2').style.position = 'fixed';
+            document.getElementById('loader2').style.top = '0';
+            document.getElementById('loader2').style.bottom = '0';
+            document.getElementById('loader2').style.display = 'flex';
+            document.getElementById('loader2').style.zIndex = '55';
+            document.getElementById('loader2').style.width = '100vw';
+            document.getElementById('loader2').style.height = '100vh';
+            document.getElementById('loader2').style.justifyContent = 'center';
+            document.getElementById('loader2').style.alignItems = 'center';
+            document.getElementById('loader2').style.backgroundColor = 'rgba(0,0,0,0.5)';
+            document.getElementById('loader2').style.backdropFilter = 'blur(5px)';
+            document.getElementById('main').style.zIndex = '-2';
+            document.getElementById('main').style.opacity = '0.5';
+            document.getElementById('background').style.zIndex = '-2';
+            document.getElementById('background').style.opacity = '0.5';
+            fetch('http://localhost:3000/api_keys').then(res => res.json()
+            ).then((data) => {
+                ts = data.ts3; hash = data.hash3;
+                return fetch(`https://gateway.marvel.com/v1/public/characters?apikey=${public_api_key}&ts=${ts}&hash=${hash}&nameStartsWith=${encodeURIComponent(inputVal)}`);
+            }).then(res => res.json()).then((data) => {
+                data.data["results"].forEach((ele) => {
+                    let image = `${ele.thumbnail.path}.${ele.thumbnail.extension}`;
+                    showContainer.innerHTML = `<div class="card-container"><div class="container-character-image"><img src="${image}"/></div><div class="character-name">${ele.name}</div><div class="character-description">${ele.description}</div></div>`;
+                });
+                document.getElementById('loader2').style.removeProperty('position');
+                document.getElementById('loader2').style.removeProperty('top');
+                document.getElementById('loader2').style.removeProperty('bottom');
+                document.getElementById('loader2').style.removeProperty('zIndex');
+                document.getElementById('loader2').style.display = 'none';
+                document.getElementById('main').style.zIndex = '1';
+                document.getElementById('main').style.opacity = '1';
+                document.getElementById('background').style.zIndex = '-1';
+                document.getElementById('background').style.removeProperty('opacity');
+            }).catch((error) => { alert("A server-side error .Try refreshing the page again."); });
+        }
+    });
+</script>
+
+</html>
