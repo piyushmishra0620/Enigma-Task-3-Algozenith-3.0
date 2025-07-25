@@ -549,7 +549,7 @@
         let ts = '';
         let hash = '';
         window.addEventListener('DOMContentLoaded', function () {
-            fetch('http://localhost:3000/api_keys')
+            fetch('https://algozenith-server.onrender.com/api_keys')
                 .then(res => res.json())
                 .then((data) => {
                     ts = data.ts1;
