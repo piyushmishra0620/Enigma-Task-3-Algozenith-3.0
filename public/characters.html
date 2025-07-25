@@ -274,7 +274,7 @@
     let public_api_key = 'cfc9f667f754212fb83dd3a351dd76c9';
     let ts = ''; let hash = '';
     window.addEventListener('DOMContentLoaded', function () {
-        fetch('http://localhost:3000/api_keys')
+        fetch('https://algozenith-server.onrender.com/api_keys')
             .then(res => res.json()
             ).then((data) => {
                 ts = data.ts3; hash = data.hash3;
@@ -331,7 +331,7 @@
             document.getElementById('main').style.opacity = '0.5';
             document.getElementById('background').style.zIndex = '-2';
             document.getElementById('background').style.opacity = '0.5';
-            fetch('http://localhost:3000/api_keys').then(res => res.json()
+            fetch('https://algozenith-server.onrender.com/api_keys').then(res => res.json()
             ).then((data) => {
                 ts = data.ts3; hash = data.hash3;
                 return fetch(`https://gateway.marvel.com/v1/public/characters?apikey=${public_api_key}&ts=${ts}&hash=${hash}&nameStartsWith=${encodeURIComponent(inputVal)}`);
